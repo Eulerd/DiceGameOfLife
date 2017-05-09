@@ -32,6 +32,7 @@ namespace DiceGameOfLife
         private void Update(object sender, ElapsedEventArgs e)
         {
             mainPictureBox.Image = drawer.Update(core, cells);
+            mainPictureBox.Refresh();
         }
 
         static Drawer drawer;
@@ -43,6 +44,18 @@ namespace DiceGameOfLife
         {
             if(e.KeyData == Keys.Escape)
                 this.Close();
+            
+            if (e.KeyData == Keys.OemMinus)
+                core.GridCount++;
+
+            if (e.KeyData == Keys.Oemplus)
+                core.GridCount--;
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            drawer.X = mainPictureBox.Width;
+            drawer.Y = mainPictureBox.Height;
         }
     }
 }

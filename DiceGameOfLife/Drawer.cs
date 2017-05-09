@@ -9,8 +9,18 @@ namespace DiceGameOfLife
 {
     class Drawer
     {
-        public int X { get; private set; }
-        public int Y { get; private set; }
+        int x, y;
+        public int X
+        {
+            get { return x; }
+            set { x = (value <= 0) ? 1 : value; }
+        }
+
+        public int Y
+        {
+            get { return y; }
+            set { y = (value <= 0) ? 1 : value; }
+        }
         
         public Drawer(int x, int y)
         {
@@ -24,17 +34,18 @@ namespace DiceGameOfLife
 
             Graphics g = Graphics.FromImage(canvas);
 
+            double grid = Math.Min(X, Y) / core.GridCount;
+
             // 格子を描写
-            double grid = X / core.GridCount;
             // y軸方向
-            for(int i = 1; i < X;i++)
+            for (int i = 0; i < X;i++)
             {
                 float pos = (float)grid * i;
                 g.DrawLine(Pens.Black, new PointF(pos, 0), new PointF(pos, Y));
             }
 
             // x軸方向
-            for(int i = 1;i < Y;i++)
+            for(int i = 0;i < Y;i++)
             {
                 float pos = (float)grid * i;
                 g.DrawLine(Pens.Black, new PointF(0, pos), new PointF(X, pos));

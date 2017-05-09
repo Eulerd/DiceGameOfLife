@@ -34,9 +34,13 @@
             // 
             // mainPictureBox
             // 
-            this.mainPictureBox.Location = new System.Drawing.Point(94, 47);
+            this.mainPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.mainPictureBox.Location = new System.Drawing.Point(100, 50);
             this.mainPictureBox.Name = "mainPictureBox";
-            this.mainPictureBox.Size = new System.Drawing.Size(518, 382);
+            this.mainPictureBox.Size = new System.Drawing.Size(512, 379);
+            this.mainPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.mainPictureBox.TabIndex = 0;
             this.mainPictureBox.TabStop = false;
             // 
@@ -50,6 +54,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.Resize += new System.EventHandler(this.Form1_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).EndInit();
             this.ResumeLayout(false);
 
