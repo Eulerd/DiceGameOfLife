@@ -9,34 +9,29 @@ namespace DiceGameOfLife
 {
     class Drawer
     {
-        int x, y;
-        public int X
-        {
-            get { return x; }
-            set { x = (value <= 0) ? 1 : value; }
-        }
-
-        public int Y
-        {
-            get { return y; }
-            set { y = (value <= 0) ? 1 : value; }
-        }
-        
-        public Drawer(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
-
         public Bitmap Update(Core core, Cells cells)
         {
+            int X = core.X;
+            int Y = core.Y;
             Bitmap canvas = new Bitmap(X, Y);
 
             Graphics g = Graphics.FromImage(canvas);
 
-            double grid = Math.Min(X, Y) / core.GridCount;
+            double grid = core.Grid;
 
-            // 格子を描写
+            // セルを描画
+            for (int i = 0; i < X; i++)
+            {
+                Size size = new Size((int)grid, (int)grid);
+                for (int j = 0; j < Y; j++)
+                {
+                    Point p = new Point((int)grid * i, (int)grid * j);
+                    Brush b = (cells.alives[i, j]) ? Brushes.Green : Brushes.White;
+                    g.FillRectangle(b, new Rectangle(p, size));
+                }
+            }
+
+            // 格子を描画
             // y軸方向
             for (int i = 0; i < X;i++)
             {

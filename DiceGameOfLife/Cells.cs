@@ -14,7 +14,7 @@ namespace DiceGameOfLife
         public int MaxX { get; private set; }
 
         /// <summary>
-        /// y方向の最大値委
+        /// y方向の最大値
         /// </summary>
         public int MaxY { get; private set; }
 
@@ -26,7 +26,7 @@ namespace DiceGameOfLife
         /// <summary>
         /// 各セルの生死
         /// </summary>
-        public static bool[,] alives;
+        public bool[,] alives;
 
         public Cells()
         {
@@ -48,9 +48,18 @@ namespace DiceGameOfLife
 
         public void Update()
         {
+            bool[,] tmp_alives = new bool[MaxX, MaxY];
+
             for (int i = 0; i < MaxX; i++)
                 for (int j = 0; j < MaxY; j++)
-                    alives[i, j] = IsAlive(i, j);
+                    tmp_alives[i, j] = IsAlive(i, j);
+
+            alives = tmp_alives;
+        }
+
+        public void ChangeSell(int x, int y)
+        {
+            alives[x, y] = !alives[x, y];
         }
 
         /// <summary>
@@ -63,25 +72,32 @@ namespace DiceGameOfLife
         {
             int count = 0;
 
-            for (int i = x - 1; i < x + 3; i++)
+            for (int i = x - 1; i < x + 2; i++)
             {
                 if (x == 0 || x == MaxX - 1)
                     continue;
 
-                for (int j = y - 1; j < y + 3; j++)
+                for (int j = y - 1; j < y + 2; j++)
                 {
                     if (y == 0 || y == MaxY - 1)
+                        continue;
+
+                    if (i == x && j == y)
                         continue;
 
                     if (alives[i, j])
                         count++;
                 }
             }
-
-            if (count == 2 || count == 3)
-                return true;
+            
+            if(alives[x,y])
+            {
+                return (count == 2 || count == 3);
+            }
             else
-                return false;
+            {
+                return count == 3;
+            }
         }
 
         /// <summary>

@@ -12,8 +12,22 @@ namespace DiceGameOfLife
         private const double MinInterval = 0.000001;
 
         double interval = MinInterval;
-
         int gridCount = MinCount;
+        int x, y;
+
+        public int X
+        {
+            get { return x; }
+            set { x = (value <= 0) ? 1 : value; }
+        }
+
+        public int Y
+        {
+            get { return y; }
+            set { y = (value <= 0) ? 1 : value; }
+        }
+
+        public double Grid { get { return Math.Min(X, Y) / GridCount; } }
         
         public double Interval
         {
@@ -33,6 +47,12 @@ namespace DiceGameOfLife
         {
             get { return gridCount; }
             set { gridCount = (value <= 0) ? MinCount : value; }
+        }
+
+        public Core(int x, int y)
+        {
+            X = x;
+            Y = y;
         }
     }
 }

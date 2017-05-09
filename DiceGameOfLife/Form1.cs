@@ -18,21 +18,33 @@ namespace DiceGameOfLife
             InitializeComponent();
         }
         
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
         {
-            core = new Core();
-            drawer = new Drawer(mainPictureBox.Width, mainPictureBox.Height);
+            core = new Core(mainPictureBox.Width, mainPictureBox.Height);
+            drawer = new Drawer();
             cells = new Cells();
+
+            cells.alives[1, 1] = true;
+            cells.alives[2, 1] = true;
+            cells.alives[2, 2] = true;
 
             timer = new System.Timers.Timer(core.Interval);
             timer.Elapsed += Update;
             timer.Start();
+
+            while(true)
+            {
+                await Task.Run(() =>
+                {
+                    mainPictureBox.Image = drawer.Update(core, cells);
+                    mainPictureBox.Refresh();
+                });
+            }
         }
 
         private void Update(object sender, ElapsedEventArgs e)
         {
-            mainPictureBox.Image = drawer.Update(core, cells);
-            mainPictureBox.Refresh();
+            cells.Update();
         }
 
         static Drawer drawer;
@@ -42,20 +54,45 @@ namespace DiceGameOfLife
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyData == Keys.Escape)
-                this.Close();
+            switch (e.KeyData)
+            {
+                case Keys.Escape:
+                    this.Close();
+                    break;
+                case Keys.OemMinus:
+                    core.GridCount++;
+                    break;
+                case Keys.Oemplus:
+                    core.GridCount--;
+                    break;
+                case Keys.Space:
+                    if (timer.Enabled)
+                        timer.Stop();
+                    else
+                        timer.Start();
+                    break;
+            }
             
-            if (e.KeyData == Keys.OemMinus)
-                core.GridCount++;
-
-            if (e.KeyData == Keys.Oemplus)
-                core.GridCount--;
         }
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            drawer.X = mainPictureBox.Width;
-            drawer.Y = mainPictureBox.Height;
+            core.X = mainPictureBox.Width;
+            core.Y = mainPictureBox.Height;
+        }
+
+        private void mainPictureBox_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void mainPictureBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            Point mp = PointToClient(Cursor.Position);
+            Point wp = mainPictureBox.Location;
+            Point p = new Point(mp.X - wp.X, mp.Y - wp.Y);
+
+            cells.ChangeSell((int)(p.X / core.Grid), (int)(p.Y / core.Grid));
         }
     }
 }
